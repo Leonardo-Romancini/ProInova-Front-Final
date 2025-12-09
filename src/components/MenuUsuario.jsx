@@ -75,7 +75,7 @@ function MenuUsuario() {
                             <span className="material-symbols-outlined">
                                 checklist_rtl
                             </span>
-                            <Link to="/estagio">Área de atuação</Link>
+                            <Link to="/area">Área de atuação</Link>
                         </div>
                         
                     )}
