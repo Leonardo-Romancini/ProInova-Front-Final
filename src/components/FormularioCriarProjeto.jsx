@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import "../components/css/FormularioCriarProjeto.css"
 import { Link } from "react-router-dom";
+import axios from 'axios';
 
 function FormularioCriarProjeto() {
-    const [titulo,setTitulo] = useState("");
-    const [descricao,setDescricao]=useState("");
-    const [imagem, setImagem]=useState("");
-    const [areaEstagio, setAreaEstagio]=useState("")
-    const [areaAtuacao, setAreaAtuacao]=useState("")
+    const [titulo, setTitulo] = useState("");
+    const [descricao, setDescricao] = useState("");
+    const [imagem, setImagem] = useState(null);
     const [fundo, setFundo] = useState("");
     const [meta, setMeta] = useState("");
     const [membro, setMembro] = useState([]);
@@ -18,7 +17,6 @@ function FormularioCriarProjeto() {
         const formatado = (numero / 100).toFixed(2);
 
         return formatado
-            .replace(".", ",")
             .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     }
 
@@ -33,32 +31,74 @@ function FormularioCriarProjeto() {
     function addMember() {
         setMembro([...membro, ""]);
     }
+
     function atualizarMembro(index, valor) {
         const novos = [...membro];
         novos[index] = valor;
         setMembro(novos);
     }
+
     function removerMembro(index) {
-        const novos = membro.filter((_, i) => i !== index);
-        setMembro(novos);
+        setMembro(membro.filter((_, i) => i !== index));
+    }
+
+    function handleImage(e) {
+        setImagem(e.target.files[0]);
     }
 
     async function create() {
+        let uploadedImageUrl = "";
+
         try {
-            const response = await axios.post("http://localhost:8080/projects", {
-                "title": titulo,
-                "description": "Descrição detalhada",
-                "currentFund": 500.00,
-                "fundGoal": 1000.00,
-                "members": ["João", "Maria"],
-                "imageUrl": "/uploads/filename",
-                "activityAreaId": 1,
-                "devStageId": 1
-            })
+            if (imagem) {
+                const formData = new FormData();
+                formData.append("file", imagem);
+
+                const imageResponse = await axios.post(
+                    "http://localhost:8080/projects/uploadImage",
+                    formData,
+                    {
+                        headers: {
+                            "Content-Type": "multipart/form-data",
+                            "Authorization": "Bearer " + localStorage.getItem("token")
+                        }
+                    }
+                );
+
+                uploadedImageUrl = await imageResponse.data; // Ajuste conforme seu backend
+                console.log(imageResponse)
+            }
+        } catch (error) {
+            alert("Erro ao fazer upload da imagem");
+            console.log(error);
+            return;
+        }
+
+        try {
+            await axios.post(
+                "http://localhost:8080/projects",
+                {
+                    title: titulo,
+                    description: descricao,
+                    currentFund: fundo,
+                    fundGoal: meta,
+                    members: membro,
+                    imageUrl: uploadedImageUrl,
+                    activityAreaId: 2,
+                    devStageId: 1,
+                },
+                {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("token")
+                    }
+                }
+            );
+
+            alert("Projeto criado com sucesso!");
 
         } catch (erro) {
-            alert("Erro ao criar projeto")
-            console.log(erro)
+            alert("Erro ao criar projeto");
+            console.log(erro);
         }
     }
 
@@ -69,7 +109,13 @@ function FormularioCriarProjeto() {
                 <h1 className="titulo">CRIAR PROJETO</h1>
 
                 <label>Título do Projeto</label>
-                <input value={titulo} type="text" className="input" placeholder="Ex: Projeto de pesquisa" />
+                <input
+                    value={titulo}
+                    onChange={(e) => setTitulo(e.target.value)}
+                    type="text"
+                    className="input"
+                    placeholder="Ex: Projeto de pesquisa"
+                />
 
                 <label>Área de atuação</label>
                 <select className="input">
@@ -82,7 +128,12 @@ function FormularioCriarProjeto() {
                 </select>
 
                 <label>Descrição do projeto</label>
-                <textarea className="textarea" placeholder="Fale sobre seu projeto!" />
+                <textarea
+                    value={descricao}
+                    onChange={(e) => setDescricao(e.target.value)}
+                    className="textarea"
+                    placeholder="Fale sobre seu projeto!"
+                />
 
                 <div className="linha">
                     <div className="coluna">
@@ -107,35 +158,42 @@ function FormularioCriarProjeto() {
 
                     <div className="coluna">
                         <label>Imagem do projeto</label>
-                        <input type="file" className="input" />
+                        <input
+                            onChange={handleImage}
+                            type="file"
+                            className="input"
+                        />
                     </div>
                 </div>
 
                 <label>Membros do projeto</label>
                 <button onClick={addMember} className="btn-add">+ Adicionar membro</button>
 
-                {/* for */}
-                {membro.map((membro, index) => (
+                {membro.map((nome, index) => (
                     <div key={index} className="membro-linha">
                         <input
                             type="text"
                             className="input"
                             placeholder="Nome do membro"
-                            value={membro}
+                            value={nome}
                             onChange={(e) => atualizarMembro(index, e.target.value)}
                         />
 
                         <div className="icons">
-                            <span onClick={() => removerMembro(index)} className="material-symbols-outlined">delete</span>
+                            <span
+                                onClick={() => removerMembro(index)}
+                                className="material-symbols-outlined"
+                            >
+                                delete
+                            </span>
                         </div>
                     </div>
                 ))}
 
-
-                <button onClick={() => create()} className="btn-criar">CRIAR PROJETO</button>
+                <button onClick={create} className="btn-criar">CRIAR PROJETO</button>
             </div>
         </div>
-    )
+    );
 }
 
 export default FormularioCriarProjeto;

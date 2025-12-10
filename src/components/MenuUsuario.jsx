@@ -68,16 +68,16 @@ function MenuUsuario() {
                             </span>
                             <Link to="/estagio">Estágios de Dev</Link>
                         </div>
-                        
+
                     )}
                     {user?.role === "ADMIN" && (
                         <div className="menu-item">
                             <span className="material-symbols-outlined">
-                                checklist_rtl
+                                apartment
                             </span>
                             <Link to="/area">Área de atuação</Link>
                         </div>
-                        
+
                     )}
                     <p className="section-title"><b>MINHA CONTA</b></p>
 
@@ -85,7 +85,7 @@ function MenuUsuario() {
                         <span className="material-symbols-outlined">
                             settings
                         </span>
-                       <Link to="/configuracoes">Configurações</Link>
+                        <Link to="/configuracoes">Configurações</Link>
                     </div>
 
                 </div>

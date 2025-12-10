@@ -8,6 +8,7 @@ function UserConfiguracoes() {
     const [username, setUsername] = useState("")
     const [senhaAtual, setSenhaAtual] = useState("")
     const [novaSenha, setNovaSenha] = useState("")
+    const [confirmarNovaSenha, setConfirmarNovaSenha]=useState("")
 
     async function getUsuario() {
         try {
@@ -30,17 +31,15 @@ function UserConfiguracoes() {
         getUsuario();
     }, []);
 
-    async function putUsuario() {
-        try {
+    async function putUsuarioSenha() {
+        /*try {
             const response = await axios.post("http://localhost:8080/user/update-password", {
                 headers: {
                     Authorization: "Bearer " + localStorage.getItem("token")
                 }
             });
             alert("Senha alterada com sucesso!");
-            setSenhaAtual("");
-            setNovaSenha("");
-            setConfirmarSenha("");
+            
 
         } catch (error) {
             if (error.response?.status === 400) {
@@ -50,7 +49,7 @@ function UserConfiguracoes() {
             }
             console.log(error);
         }
-
+*/
     }
     return (
         <div>
@@ -80,7 +79,10 @@ function UserConfiguracoes() {
                     <label>Nova senha:</label>
                     <input value={novaSenha} onChange={(e) => setNovaSenha(e.target.value)} type="password" />
 
-                    <button onClick={putUsuario} className="salvar-btn">
+                    <label>Confirme a nova senha:</label>
+                    <input value={confirmarNovaSenha} onChange={(e) => setConfirmarNovaSenha(e.target.value)} type="password" />
+
+                    <button onClick={putUsuarioSenha} className="salvar-btn">
                         <span className="material-symbols-outlined">check</span> Salvar
                     </button>
                 </div>

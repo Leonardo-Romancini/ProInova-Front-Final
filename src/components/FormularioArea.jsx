@@ -18,12 +18,12 @@ function FormularioArea() {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/activityarea",
-        { area: nomeArea },
-        {
+        "http://localhost:8080/activityarea",{
+         area: nomeArea ,
+        },{
           headers: {
-            Authorization: "Bearer " + localStorage.getItem("token"),
-          },
+            Authorization: "Bearer " + localStorage.getItem("token")
+          }
         }
       );
 
@@ -73,14 +73,13 @@ function FormularioArea() {
 
     try {
       await axios.put(
-        `http://localhost:8080/activityarea/${idEditando}`,
-        { area: nomeArea },
-        {
+        `http://localhost:8080/activityarea/${idEditando}`, {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),
           },
-        }
-      );
+        
+        area: nomeArea
+    });
 
       alert("Área atualizada com sucesso!");
       setNomeArea("");
