@@ -59,7 +59,7 @@ function MenuUsuario() {
                         <span className="material-symbols-outlined">
                             view_list
                         </span>
-                        <a href="/meus-projetos">Meus projetos</a>
+                        <a href="/meuprojeto">Meus projetos</a>
                     </div>
                     {user?.role === "ADMIN" && (
                         <div className="menu-item">

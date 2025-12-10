@@ -7,6 +7,9 @@ import Rotas from "./components/Rotas";
 import Estagio from "./pages/estagio/Estagio";
 import Area from "./pages/area/Area";
 import Configuracoes from "./pages/configuracoes/Configuracoes";
+import VisualizarProjeto from "./pages/projeto/VisualizarProjeto";
+import MeuProjeto from "./pages/projeto/MeuProjeto";
+import ProjetoEditar from "./pages/projeto/ProjetoEditar";
 
 function App() {
   return (
@@ -19,6 +22,9 @@ function App() {
         <Route path="/estagio" element={<Rotas><Estagio /></Rotas>}></Route>
         <Route path="/area" element={<Rotas><Area /></Rotas>}></Route>
         <Route path="/configuracoes" element={<Rotas><Configuracoes></Configuracoes></Rotas>}></Route>
+        <Route path="/viewprojeto/:id" element={<Rotas><VisualizarProjeto /></Rotas>}></Route>
+        <Route path="/meuprojeto" element={<Rotas><MeuProjeto /></Rotas>}></Route>
+        <Route path="/projeto-editar/:id" element={<Rotas><ProjetoEditar /></Rotas>}></Route>
       </Routes>
   );
 }

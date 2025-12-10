@@ -10,8 +10,8 @@ function Home() {
 
   return (
     <>
-        <Navbar />
         <div className="home">
+          <Navbar />
           <HomeProjetos></HomeProjetos>
           <Footer></Footer>
         </div>

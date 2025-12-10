@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import "../components/css/FormularioCriarProjeto.css"
 import { Link } from "react-router-dom";
 import axios from 'axios';
@@ -10,6 +10,10 @@ function FormularioCriarProjeto() {
     const [fundo, setFundo] = useState("");
     const [meta, setMeta] = useState("");
     const [membro, setMembro] = useState([]);
+    const [areas, setAreas] = useState([]);
+    const [estagios, setEstagios] = useState([]);
+    const [areaSelecionada, setAreaSelecionada] = useState("");
+    const [estagioSelecionado, setEstagioSelecionado] = useState("");
 
     function formatarMoeda(valor) {
         valor = valor.replace(/\D/g, "");
@@ -44,6 +48,39 @@ function FormularioCriarProjeto() {
 
     function handleImage(e) {
         setImagem(e.target.files[0]);
+    }
+
+    useEffect(() => {
+        carregarAreas();
+        carregarEstagios();
+    }, []);
+
+    async function carregarAreas() {
+        try {
+            const resposta = await axios.get("http://localhost:8080/activityarea", {
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem("token")
+                }
+            });
+            setAreas(resposta.data);
+            console.log(resposta.data)
+        } catch (err) {
+            console.log("Erro ao carregar áreas", err);
+        }
+    }
+
+    async function carregarEstagios() {
+        try {
+            const resposta = await axios.get("http://localhost:8080/devstage", {
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem("token")
+                }
+            });
+            setEstagios(resposta.data);
+            console.log(resposta.data)
+        } catch (err) {
+            console.log("Erro ao carregar estágios", err);
+        }
     }
 
     async function create() {
@@ -84,8 +121,8 @@ function FormularioCriarProjeto() {
                     fundGoal: meta,
                     members: membro,
                     imageUrl: uploadedImageUrl,
-                    activityAreaId: 2,
-                    devStageId: 1,
+                    activityAreaId: areaSelecionada,
+                    devStageId: estagioSelecionado,
                 },
                 {
                     headers: {
@@ -118,13 +155,33 @@ function FormularioCriarProjeto() {
                 />
 
                 <label>Área de atuação</label>
-                <select className="input">
-                    <option>Selecione uma área de atuação</option>
+                <select
+                    className="input"
+                    value={areaSelecionada}
+                    onChange={(e) => setAreaSelecionada(e.target.value)}
+                >
+                    <option value="">Selecione uma área de atuação</option>
+
+                    {areas.map(area => (
+                        <option key={area.id} value={area.id}>
+                            {area.area}
+                        </option>
+                    ))}
                 </select>
 
                 <label>Estágio de desenvolvimento</label>
-                <select className="input">
-                    <option>Selecione um estágio de desenvolvimento</option>
+                <select
+                    className="input"
+                    value={estagioSelecionado}
+                    onChange={(e) => setEstagioSelecionado(e.target.value)}
+                >
+                    <option value="">Selecione um estágio de desenvolvimento</option>
+
+                    {estagios.map(estagio => (
+                        <option key={estagio.id} value={estagio.id}>
+                            {estagio.stage}
+                        </option>
+                    ))}
                 </select>
 
                 <label>Descrição do projeto</label>

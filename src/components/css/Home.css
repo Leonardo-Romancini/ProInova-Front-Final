@@ -7,11 +7,12 @@ body {
 .home{
   display: flex;
   flex-direction: column;
-  padding-top: 50px;
+  
   background-image: url('/public/background.png');
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+  min-height: 100vh;
 }
   .header{
     display: flex;
@@ -221,20 +222,20 @@ body {
 
 
 .projects {
-  display: flex;
-  justify-content: center;
-  gap: 30px;
-  margin-top: 40px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
 }
 
 .project-card {
   border: 1px solid #7B2CBF;
   border-radius: 7px;
   width: 250px;
-  height: 230px;
+  min-height: 280px; 
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-between; 
   padding: 10px;
   text-align: center;
   background-color: white;
@@ -265,6 +266,124 @@ body {
   color: white;
   text-decoration: none;
 }
+
+/* Área de filtros */
+
+.areas {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  padding: 10px 0;
+  border-bottom: 1px solid grey;
+  background-color: white;
+}
+
+.areas a {
+  text-decoration: none;
+  color: #7B2CBF;
+  font-size: 15px;
+}
+
+.areas a:hover {
+  text-decoration: underline;
+  color: black;
+}
+
+/* Botão para abrir o restante das áreas */
+.btn-mais-areas {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: #7B2CBF;
+  display: flex;
+  align-items: center;
+}
+
+.btn-mais-areas:hover {
+  color: black;
+}
+
+/* Área expandida */
+.todas-areas {
+  margin-top: 15px;
+  padding: 20px 0;
+  display: none; 
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px 20px;
+  background-color: white;
+  border-top: 1px solid #ccc;
+  justify-items: center;
+}
+
+.todas-areas.open {
+  display: grid; 
+}
+
+/* Estilo dos itens adicionais */
+.area-item {
+  background: #ffffff;
+  color: #7B2CBF;
+  padding: 6px 12px;
+  border: none;
+  text-decoration: none;
+  font-size: 14px;
+  transition: 0.2s ease-in-out;
+}
+
+.area-item:hover {
+  background-color: #f2e6ff;
+  color: black;
+}
+
+.project-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%; 
+  align-items: center;
+  margin-top: 8px;
+}
+
+
+/* Botão Ver Mais */
+
+.btn-ver-mais,
+
+.btn-ver-mais {
+  background-color: #7B2CBF;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.btn-ver-mais:hover {
+  background-color: #5a1e8f;
+}
+
+/* Botão Editar */
+.btn-editar {
+  background-color: #fff;
+  color: #7B2CBF;
+  border: 1px solid #7B2CBF;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s;
+  width: 80%;
+}
+
+.btn-editar:hover {
+  background-color: #7B2CBF;
+  color: white;
+  border: 1px solid #7B2CBF;
+}
+
 @media (max-width: 700px ) {
   .projects {
     display: flex;
