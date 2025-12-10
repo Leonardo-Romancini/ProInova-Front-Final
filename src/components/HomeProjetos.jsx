@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../components/css/Home.css";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 function HomeProjetos() {
@@ -10,7 +10,7 @@ function HomeProjetos() {
 
   const location = useLocation();
   const params = new URLSearchParams(location.search);
-
+  const navigate = useNavigate();
   const search = params.get("search") || "";
   const areaId = params.get("areaId") || "";
 
@@ -42,6 +42,10 @@ function HomeProjetos() {
 
   }, [search, areaId]);
 
+  const handleVerMais = (id) => {
+    navigate(`/viewprojeto/${id}`);
+  };
+
   return (
     <div className="main-section">
       <div className="headline">
@@ -64,10 +68,12 @@ function HomeProjetos() {
             {/* Título vindo do banco */}
             <h3>{projeto.title}</h3>
 
-            {/* Link para ver mais */}
-            <Link to={`/viewprojeto/${projeto.id}`} className="project-link">
-              Ver mais do projeto
-            </Link>
+
+            <div className="project-buttons">
+              <button onClick={() => handleVerMais(projeto.id)} className="btn-ver-mais">
+                Ver mais
+              </button>
+            </div>
           </div>
         ))}
       </div>

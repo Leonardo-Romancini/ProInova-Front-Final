@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react'
-import "../components/css/UserConfiguracoes.css"
-import axios from 'axios'
+import React, { useState, useEffect } from 'react';
+import "../components/css/UserConfiguracoes.css";
+import axios from 'axios';
 
 function UserConfiguracoes() {
 
-    const [nome, setNome] = useState("")
-    const [username, setUsername] = useState("")
-    const [senhaAtual, setSenhaAtual] = useState("")
-    const [novaSenha, setNovaSenha] = useState("")
-    const [confirmarNovaSenha, setConfirmarNovaSenha]=useState("")
+    const [nome, setNome] = useState("");
+    const [username, setUsername] = useState("");
+    const [senhaAtual, setSenhaAtual] = useState("");
+    const [novaSenha, setNovaSenha] = useState("");
+    const [confirmarNovaSenha, setConfirmarNovaSenha] = useState("");
 
     async function getUsuario() {
         try {
@@ -20,7 +20,6 @@ function UserConfiguracoes() {
 
             setNome(response.data.name);
             setUsername(response.data.username);
-            console.log(response.data)
 
         } catch (error) {
             console.log(error);
@@ -31,15 +30,70 @@ function UserConfiguracoes() {
         getUsuario();
     }, []);
 
-    async function putUsuarioSenha() {
-        /*try {
-            const response = await axios.post("http://localhost:8080/user/update-password", {
+    // Atualizar apenas o nome
+    async function putNome() {
+        if (!nome) return; // Não envia se estiver vazio
+        try {
+            await axios.put("http://localhost:8080/user/update-name", {
+                name: nome
+            }, {
                 headers: {
                     Authorization: "Bearer " + localStorage.getItem("token")
                 }
             });
+
+            alert("Nome atualizado com sucesso!");
+            getUsuario();
+
+        } catch (error) {
+            console.log(error);
+            alert("Erro ao atualizar o nome.");
+        }
+    }
+
+    // Atualizar apenas o username
+    async function putUsername() {
+        if (!username) return; // Não envia se estiver vazio
+        try {
+            await axios.put("http://localhost:8080/user/update-name", {
+                username: username
+            }, {
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token")
+                }
+            });
+
+            alert("Nome de usuário atualizado com sucesso!");
+            getUsuario();
+
+        } catch (error) {
+            console.log(error);
+            alert("Erro ao atualizar o nome de usuário.");
+        }
+    }
+
+    // Atualizar senha
+    async function putUsuarioSenha() {
+        if (novaSenha !== confirmarNovaSenha) {
+            alert("As senhas não coincidem.");
+            return;
+        }
+
+        try {
+            await axios.put("http://localhost:8080/user/update-password", {
+                currentPass: senhaAtual,
+                newPass: novaSenha,
+                confirmPass: confirmarNovaSenha
+            }, {
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token")
+                }
+            });
+
             alert("Senha alterada com sucesso!");
-            
+            setSenhaAtual("");
+            setNovaSenha("");
+            setConfirmarNovaSenha("");
 
         } catch (error) {
             if (error.response?.status === 400) {
@@ -49,27 +103,36 @@ function UserConfiguracoes() {
             }
             console.log(error);
         }
-*/
     }
+
     return (
         <div>
             <h1 className="titulo">CONFIGURAÇÕES</h1>
             <div className="config-card">
                 <div className="left">
-
                     <label>Nome:</label>
                     <div className="input-edit">
                         <input value={nome} onChange={(e) => setNome(e.target.value)} type="text" />
-                        <span className="material-symbols-outlined edit-icon">edit</span>
+                        <span 
+                            className="material-symbols-outlined edit-icon" 
+                            onClick={putNome}
+                        >
+                            edit
+                        </span>
                     </div>
 
                     <label>Nome de usuário:</label>
                     <div className="input-edit">
-                        <input value={username} onChange={(e) => setNome(e.target.value)} type="text" />
-                        <span className="material-symbols-outlined edit-icon">edit</span>
+                        <input value={username} onChange={(e) => setUsername(e.target.value)} type="text" />
+                        <span 
+                            className="material-symbols-outlined edit-icon" 
+                            onClick={putUsername}
+                        >
+                            edit
+                        </span>
                     </div>
-
                 </div>
+
                 <div className="right">
                     <h3>Trocar senha:</h3>
 
@@ -88,7 +151,7 @@ function UserConfiguracoes() {
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
 export default UserConfiguracoes;
